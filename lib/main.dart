@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './models_providers/shopping_items_provider.dart';
 
 import './screens/main-view-screen.dart';
+import 'screens/shopping_item_editor_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,10 +20,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'some title',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.orange,
+          accentColor: Colors.amber,
         ),
         home: MainViewScreen(),
-        routes: {},
+        routes: {
+          ShoppingItemEditorScreen.routeName: (ctx) =>
+              ShoppingItemEditorScreen(),
+        },
       ),
     );
   }

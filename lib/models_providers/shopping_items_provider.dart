@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import '../constants.dart';
 
 class ShoppingItem {
+  final int serialNumber;
   final String name;
   final String description;
   final double quantity;
   final String unit;
 
   const ShoppingItem({
+    this.serialNumber = 0,
     @required this.name,
     @required this.description,
     @required this.quantity,
