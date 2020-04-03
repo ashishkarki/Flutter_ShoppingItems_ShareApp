@@ -5,7 +5,7 @@ import 'package:share/share.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
-class ShareFeatureWidget extends StatelessWidget {
+class ShareComponentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);

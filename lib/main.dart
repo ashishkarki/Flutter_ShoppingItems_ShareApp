@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import './models_providers/shopping_items_provider.dart';
 
-import './screens/main-view-screen.dart';
+import './screens/main_view_screen.dart';
 import 'screens/shopping_item_editor_screen.dart';
 
 void main() => runApp(MyApp());

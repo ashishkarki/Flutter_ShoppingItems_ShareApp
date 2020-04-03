@@ -9,8 +9,14 @@ class ShoppingItemEditorScreen extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
+  final _descriptionFocusNode = FocusNode();
+  final _quantityFocusNode = FocusNode();
+  final _unitFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
+    final focusScope = FocusScope.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add/Edit new Item'),
@@ -28,6 +34,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                // // ITEM NAME
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Item Name',
@@ -35,7 +42,40 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                   ),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
+                  onFieldSubmitted: (_) {
+                    focusScope.requestFocus(_descriptionFocusNode);
+                  },
                 ),
+                // // ITEM DESCRIPTION
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText:
+                        'Item Description like brand, color, material etc',
+                    errorStyle: TextStyle(color: Colors.red),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 3,
+                  focusNode: _descriptionFocusNode,
+                  onFieldSubmitted: (_) {
+                    focusScope.requestFocus(_quantityFocusNode);
+                  },
+                ),
+                // // ITEM QUANITY
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Quantity in Units',
+                    errorStyle: TextStyle(color: Colors.red),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 3,
+                  focusNode: _quantityFocusNode,
+                  onFieldSubmitted: (_) {
+                    focusScope.requestFocus(_unitFocusNode);
+                  },
+                ),
+                // // ITEM UNIT/s like Kgs, Litre, Packets, Bag, Box, Grams, Can etc
               ],
             ),
           ),
