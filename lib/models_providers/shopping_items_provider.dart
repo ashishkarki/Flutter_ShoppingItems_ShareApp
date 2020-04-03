@@ -54,7 +54,7 @@ class ShoppingItemsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateShoppingItemUnits(int shopItemId) {}
+  void updateShoppingItemUnits(int newShoppingItemWithUnitsOnly) {}
 
   void sortShoppingItems() {
     _items.sort(

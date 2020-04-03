@@ -23,6 +23,16 @@ class ShoppingItemEditorScreen extends StatelessWidget {
     'unit': '',
   };
 
+  void _updateUnitsForShoppingItem(String dropdownNewValue) {
+    // print('val: $dropdownNewValue');
+    _editedShoppingItem = ShoppingItem(
+      name: _editedShoppingItem.name,
+      description: _editedShoppingItem.description,
+      quantity: _editedShoppingItem.quantity,
+      unit: dropdownNewValue,
+    );
+  }
+
   void _saveForm(
     BuildContext context,
     AppStateProvider appStateProvider,
@@ -37,6 +47,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
     appStateProvider.isLoading = true;
 
     try {
+      print('after onsave: ${_editedShoppingItem.unit}');
       shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem);
     } catch (exception) {
       print(exception);
@@ -173,7 +184,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                 ShoppingDropdown(
                   SHOPPING_ITEM_UNIT_NAMEs,
                   _unitFocusNode,
-                  _editedShoppingItem,
+                  _updateUnitsForShoppingItem,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),

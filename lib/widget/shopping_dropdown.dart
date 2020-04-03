@@ -5,12 +5,12 @@ import '../models_providers/shopping_items_provider.dart';
 class ShoppingDropdown extends StatefulWidget {
   final List<String> _dropdownItems;
   final FocusNode _focusNode;
-  ShoppingItem _editedShoppingItem;
+  final Function _updateUnitsForShoppingItem;
 
   ShoppingDropdown(
     this._dropdownItems,
     this._focusNode,
-    this._editedShoppingItem,
+    this._updateUnitsForShoppingItem,
   );
 
   @override
@@ -40,15 +40,9 @@ class _ShoppingDropdownState extends State<ShoppingDropdown> {
         setState(() {
           dropdownValue = newValue;
 
-          widget._editedShoppingItem = ShoppingItem(
-            name: widget._editedShoppingItem.name,
-            description: widget._editedShoppingItem.description,
-            quantity: widget._editedShoppingItem.quantity,
-            unit: newValue,
-          );
-
-          Provider.of<ShoppingItemsProvider>(context)
-              .updateShoppingItemUnits(null);
+          widget._updateUnitsForShoppingItem(dropdownValue);
+          // Provider.of<ShoppingItemsProvider>(context)
+          //     .updateShoppingItemUnits(null);
         });
       },
       items: <String>[...widget._dropdownItems]

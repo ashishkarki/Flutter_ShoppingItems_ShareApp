@@ -22,7 +22,11 @@ class ShoppingItemsViewWidget extends StatelessWidget {
           _shoppingItem.name,
           style: themeData.textTheme.title,
         ),
-        subtitle: Text(_shoppingItem.description),
+        subtitle: Text(
+          '${_shoppingItem.description}, Qty: ${_shoppingItem.quantity} ${_shoppingItem.unit}',
+          softWrap: true,
+          overflow: TextOverflow.clip,
+        ),
         trailing: Icon(Icons.delete),
         onTap: () => showMyAlert(context),
       ),
