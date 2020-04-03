@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../screens/shopping_item_editor_screen.dart';
-import '../widget/shoppingItems_view.dart';
-import '../widget/share-feature.dart';
+import '../widget/shopping_items_view.dart';
+import '../widget/sharing_component.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
@@ -48,7 +48,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
               top: 20.0,
             ),
           ),
-          ShareFeatureWidget(),
+          ShareComponentWidget(),
         ],
         //),
       ),

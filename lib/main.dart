@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './models_providers/shopping_items_provider.dart';
+import './models_providers/app_state_provider.dart';
 
 import './screens/main_view_screen.dart';
 import 'screens/shopping_item_editor_screen.dart';
@@ -15,6 +16,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: ShoppingItemsProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: AppStateProvider(),
         ),
       ],
       child: MaterialApp(

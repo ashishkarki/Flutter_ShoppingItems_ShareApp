@@ -1,80 +1,123 @@
-// import 'package:flutter/material.dart';
-// import 'package:share/share.dart';
+import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(DemoApp());
-// }
+class User {
+  static const String PassionCooking = 'cooking';
+  static const String PassionHiking = 'hiking';
+  static const String PassionTraveling = 'traveling';
 
-// class DemoApp extends StatefulWidget {
-//   @override
-//   DemoAppState createState() => DemoAppState();
-// }
+  String firstName = '';
+  String lastName = '';
+  Map<String, bool> passions = {
+    PassionCooking: false,
+    PassionHiking: false,
+    PassionTraveling: false
+  };
+  bool newsletter = false;
 
-// class DemoAppState extends State<DemoApp> {
-//   String text = '';
-//   String subject = '';
+  save() {
+    print('saving user using a web service');
+  }
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Share Plugin Demo',
-//       home: Scaffold(
-//           appBar: AppBar(
-//             title: const Text('Share Plugin Demo'),
-//           ),
-//           body: Padding(
-//             padding: const EdgeInsets.all(24.0),
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: <Widget>[
-//                 TextField(
-//                   decoration: const InputDecoration(
-//                     labelText: 'Share text:',
-//                     hintText: 'Enter some text and/or link to share',
-//                   ),
-//                   maxLines: 2,
-//                   onChanged: (String value) => setState(() {
-//                     text = value;
-//                   }),
-//                 ),
-//                 TextField(
-//                   decoration: const InputDecoration(
-//                     labelText: 'Share subject:',
-//                     hintText: 'Enter subject to share (optional)',
-//                   ),
-//                   maxLines: 2,
-//                   onChanged: (String value) => setState(() {
-//                     subject = value;
-//                   }),
-//                 ),
-//                 const Padding(padding: EdgeInsets.only(top: 24.0)),
-//                 Builder(
-//                   builder: (BuildContext context) {
-//                     return RaisedButton(
-//                       child: const Text('Share'),
-//                       onPressed: text.isEmpty
-//                           ? null
-//                           : () {
-//                               // A builder is used to retrieve the context immediately
-//                               // surrounding the RaisedButton.
-//                               //
-//                               // The context's `findRenderObject` returns the first
-//                               // RenderObject in its descendent tree when it's not
-//                               // a RenderObjectWidget. The RaisedButton's RenderObject
-//                               // has its position and size after it's built.
-//                               final RenderBox box = context.findRenderObject();
-//                               Share.share(text,
-//                                   subject: subject,
-//                                   sharePositionOrigin:
-//                                       box.localToGlobal(Offset.zero) &
-//                                           box.size);
-//                             },
-//                     );
-//                   },
-//                 ),
-//               ],
-//             ),
-//           )),
-//     );
-//   }
-// }
+class HomeMaterial extends StatefulWidget {
+  @override
+  _HomeMaterialState createState() => _HomeMaterialState();
+}
+
+class _HomeMaterialState extends State<HomeMaterial> {
+  final _formKey = GlobalKey<FormState>();
+  final _user = User();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Profile')),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+        child: Builder(
+          builder: (context) => Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'First name'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter your first name';
+                    }
+                  },
+                  onSaved: (val) => setState(() => _user.firstName = val),
+                ),
+                TextFormField(
+                    decoration: InputDecoration(labelText: 'Last name'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your last name.';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _user.lastName = val)),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+                  child: Text('Subscribe'),
+                ),
+                SwitchListTile(
+                  title: const Text('Monthly Newsletter'),
+                  value: _user.newsletter,
+                  onChanged: (bool val) =>
+                      setState(() => _user.newsletter = val),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+                  child: Text('Interests'),
+                ),
+                CheckboxListTile(
+                  title: const Text('Cooking'),
+                  value: _user.passions[User.PassionCooking],
+                  onChanged: (val) {
+                    setState(
+                      () => _user.passions[User.PassionCooking] = val,
+                    );
+                  },
+                ),
+                CheckboxListTile(
+                    title: const Text('Traveling'),
+                    value: _user.passions[User.PassionTraveling],
+                    onChanged: (val) {
+                      setState(
+                          () => _user.passions[User.PassionTraveling] = val);
+                    }),
+                CheckboxListTile(
+                    title: const Text('Hiking'),
+                    value: _user.passions[User.PassionHiking],
+                    onChanged: (val) {
+                      setState(() => _user.passions[User.PassionHiking] = val);
+                    }),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 16.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      final form = _formKey.currentState;
+                      if (form.validate()) {
+                        form.save();
+                        _user.save();
+                        _showDialog(context);
+                      }
+                    },
+                    child: Text('Save'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _showDialog(BuildContext context) {
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Submitting form')));
+  }
+}

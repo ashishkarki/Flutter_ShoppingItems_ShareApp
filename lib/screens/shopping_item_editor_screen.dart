@@ -1,11 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models_providers/shopping_items_provider.dart';
+import '../widget/shopping_dropdown.dart';
+import '../models_providers/app_state_provider.dart';
+import '../constants.dart';
 
 class ShoppingItemEditorScreen extends StatelessWidget {
   static final routeName = '/shopping-item-editor';
 
   final _formKey = GlobalKey<FormState>();
+  var _editedShoppingItem = ShoppingItem(
+    name: '',
+    description: '',
+    quantity: 0.0,
+    unit: '',
+  );
+  var _initShoppingItemValues = {
+    'name': '',
+    'description': '',
+    'quantity': 0.0,
+    'unit': '',
+  };
 
-  void _saveForm(BuildContext context) {
+  void _saveForm(
+    BuildContext context,
+    AppStateProvider appStateProvider,
+    ShoppingItemsProvider shoppingItemsProvider,
+  ) {
+    if (_formKey.currentState.validate()) {
+      return;
+    }
+
+    _formKey.currentState.save();
+
+    appStateProvider.isLoading = true;
+
+    try {
+      shoppingItemsProvider.sortShoppingItems();
+    } catch (exception) {
+      print(exception);
+    } finally {
+      appStateProvider.isLoading = false;
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -16,6 +54,11 @@ class ShoppingItemEditorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final focusScope = FocusScope.of(context);
+    final appStateProvider = Provider.of<AppStateProvider>(context);
+    final shopItemsProvider = Provider.of<ShoppingItemsProvider>(
+      context,
+      listen: false,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +66,11 @@ class ShoppingItemEditorScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () => _saveForm(context),
+            onPressed: () => _saveForm(
+              context,
+              appStateProvider,
+              shopItemsProvider,
+            ),
           ),
         ],
       ),
@@ -36,6 +83,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
               children: <Widget>[
                 // // ITEM NAME
                 TextFormField(
+                  initialValue: _initShoppingItemValues['name'],
                   decoration: InputDecoration(
                     labelText: 'Item Name',
                     errorStyle: TextStyle(color: Colors.red),
@@ -45,9 +93,16 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                   onFieldSubmitted: (_) {
                     focusScope.requestFocus(_descriptionFocusNode);
                   },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a Name for the item';
+                    }
+                    return null;
+                  },
                 ),
                 // // ITEM DESCRIPTION
                 TextFormField(
+                  initialValue: _initShoppingItemValues['description'],
                   decoration: InputDecoration(
                     labelText:
                         'Item Description like brand, color, material etc',
@@ -63,19 +118,46 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                 ),
                 // // ITEM QUANITY
                 TextFormField(
+                  initialValue: _initShoppingItemValues['quantity'],
                   decoration: InputDecoration(
                     labelText: 'Quantity in Units',
                     errorStyle: TextStyle(color: Colors.red),
                   ),
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.multiline,
+                  keyboardType: TextInputType.number,
                   maxLines: 3,
                   focusNode: _quantityFocusNode,
                   onFieldSubmitted: (_) {
                     focusScope.requestFocus(_unitFocusNode);
                   },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a numerical Quantity for the item';
+                    }
+                    if (double.parse(value) <= 0.0) {
+                      return 'Please enter a numerical value greater than Zero';
+                    }
+                    return null;
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 15.0,
+                  ),
                 ),
                 // // ITEM UNIT/s like Kgs, Litre, Packets, Bag, Box, Grams, Can etc
+                ShoppingDropdown(SHOPPING_ITEM_UNIT_NAMEs, _unitFocusNode),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: RaisedButton(
+                    onPressed: () => _saveForm(
+                      context,
+                      appStateProvider,
+                      shopItemsProvider,
+                    ),
+                    child: Text('Submit'),
+                  ),
+                ),
               ],
             ),
           ),

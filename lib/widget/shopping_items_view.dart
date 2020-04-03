@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models_providers/app_state_provider.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
@@ -14,7 +16,8 @@ class ShoppingItemsViewWidget extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        leading: Text('${_shoppingItem.serialNumber}.'),
+        leading:
+            Text('${Provider.of<AppStateProvider>(context).itemViewIndex}.'),
         title: Text(
           _shoppingItem.name,
           style: themeData.textTheme.title,

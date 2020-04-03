@@ -2,13 +2,13 @@ import 'package:flutter/foundation.dart';
 import '../constants.dart';
 
 class ShoppingItem {
-  final int serialNumber;
+  int serialNumber;
   final String name;
   final String description;
   final double quantity;
   final String unit;
 
-  const ShoppingItem({
+  ShoppingItem({
     this.serialNumber = 0,
     @required this.name,
     @required this.description,
@@ -19,6 +19,11 @@ class ShoppingItem {
 
 class ShoppingItemsProvider with ChangeNotifier {
   List<ShoppingItem> _items = [...dummyData];
+
+  int get _serialNumber {
+    // get a brand new serial no. for a new item being added
+    return _items.length + 1;
+  }
 
   List<ShoppingItem> get items {
     return [..._items];
@@ -36,5 +41,24 @@ class ShoppingItemsProvider with ChangeNotifier {
     });
 
     return formatShareText;
+  }
+
+  void addNewShoppingItem(ShoppingItem newShoppingItem) {
+    // generate new serialnumber before adding the new item
+    newShoppingItem.serialNumber = _serialNumber;
+
+    _items.add(newShoppingItem);
+    // also, sort items according to the name
+    sortShoppingItems();
+
+    notifyListeners();
+  }
+
+  void updateShoppingItemUnits(int shopItemId) {}
+
+  void sortShoppingItems() {
+    _items.sort(
+      (item1, item2) => item1.name.compareTo(item2.name),
+    );
   }
 }
