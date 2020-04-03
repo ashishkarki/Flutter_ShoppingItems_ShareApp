@@ -9,8 +9,8 @@ class AppState {
 }
 
 class AppStateProvider with ChangeNotifier {
+  int _itemViewIndex = 0; // check 'ShoppingItemsViewWidget' widget
   bool _isLoading;
-  int _itemViewIndex = 0;
 
   int get itemViewIndex {
     itemViewIndex = 1;

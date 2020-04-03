@@ -28,7 +28,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
     AppStateProvider appStateProvider,
     ShoppingItemsProvider shoppingItemsProvider,
   ) {
-    if (_formKey.currentState.validate()) {
+    if (!_formKey.currentState.validate()) {
       return;
     }
 
@@ -37,7 +37,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
     appStateProvider.isLoading = true;
 
     try {
-      shoppingItemsProvider.sortShoppingItems();
+      shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem);
     } catch (exception) {
       print(exception);
     } finally {
@@ -99,13 +99,21 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    _editedShoppingItem = ShoppingItem(
+                      name: newValue,
+                      description: _editedShoppingItem.description,
+                      quantity: _editedShoppingItem.quantity,
+                      unit: _editedShoppingItem.unit,
+                    );
+                  },
                 ),
-                // // ITEM DESCRIPTION
+                // // ITEM DESCRIPTION is optional
                 TextFormField(
                   initialValue: _initShoppingItemValues['description'],
                   decoration: InputDecoration(
                     labelText:
-                        'Item Description like brand, color, material etc',
+                        '(Optional) Item Description like brand, color, material etc',
                     errorStyle: TextStyle(color: Colors.red),
                   ),
                   textInputAction: TextInputAction.next,
@@ -115,10 +123,18 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                   onFieldSubmitted: (_) {
                     focusScope.requestFocus(_quantityFocusNode);
                   },
+                  onSaved: (newValue) {
+                    _editedShoppingItem = ShoppingItem(
+                      name: _editedShoppingItem.name,
+                      description: newValue,
+                      quantity: _editedShoppingItem.quantity,
+                      unit: _editedShoppingItem.unit,
+                    );
+                  },
                 ),
                 // // ITEM QUANITY
                 TextFormField(
-                  initialValue: _initShoppingItemValues['quantity'],
+                  initialValue: _initShoppingItemValues['quantity'].toString(),
                   decoration: InputDecoration(
                     labelText: 'Quantity in Units',
                     errorStyle: TextStyle(color: Colors.red),
@@ -139,6 +155,14 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                     }
                     return null;
                   },
+                  onSaved: (newValue) {
+                    _editedShoppingItem = ShoppingItem(
+                      name: _editedShoppingItem.name,
+                      description: _editedShoppingItem.description,
+                      quantity: double.parse(newValue),
+                      unit: _editedShoppingItem.unit,
+                    );
+                  },
                 ),
                 const Padding(
                   padding: EdgeInsets.only(
@@ -146,7 +170,11 @@ class ShoppingItemEditorScreen extends StatelessWidget {
                   ),
                 ),
                 // // ITEM UNIT/s like Kgs, Litre, Packets, Bag, Box, Grams, Can etc
-                ShoppingDropdown(SHOPPING_ITEM_UNIT_NAMEs, _unitFocusNode),
+                ShoppingDropdown(
+                  SHOPPING_ITEM_UNIT_NAMEs,
+                  _unitFocusNode,
+                  _editedShoppingItem,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: RaisedButton(

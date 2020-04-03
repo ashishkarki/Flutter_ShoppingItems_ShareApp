@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/shopping_item_editor_screen.dart';
 import '../widget/shopping_items_view.dart';
@@ -15,7 +16,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
   @override
   Widget build(BuildContext context) {
     final navState = Navigator.of(context);
-    final shoppingItemList = dummyData;
+    final shopItemsProvider = Provider.of<ShoppingItemsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -40,8 +41,11 @@ class _MainViewScreenState extends State<MainViewScreen> {
       body: ListView(
         padding: const EdgeInsets.all(15.0),
         children: <Widget>[
-          ...shoppingItemList
-              .map((ShoppingItem shopItem) => ShoppingItemsViewWidget(shopItem))
+          ...shopItemsProvider.items
+              .map(
+                (ShoppingItem shoppingItem) =>
+                    ShoppingItemsViewWidget(shoppingItem),
+              )
               .toList(),
           const Padding(
             padding: EdgeInsets.only(
