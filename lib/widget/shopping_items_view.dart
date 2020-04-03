@@ -6,9 +6,10 @@ import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
 class ShoppingItemsViewWidget extends StatelessWidget {
+  final int itemViewIndex;
   final ShoppingItem _shoppingItem;
 
-  ShoppingItemsViewWidget(this._shoppingItem);
+  ShoppingItemsViewWidget(this.itemViewIndex, this._shoppingItem);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,7 @@ class ShoppingItemsViewWidget extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        leading:
-            Text('${Provider.of<AppStateProvider>(context).itemViewIndex}.'),
+        leading: Text('$itemViewIndex.'),
         title: Text(
           _shoppingItem.name,
           style: themeData.textTheme.title,

@@ -38,24 +38,36 @@ class _MainViewScreenState extends State<MainViewScreen> {
           ),
         ],
       ),
-      body: ListView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(15.0),
-        children: <Widget>[
-          ...shopItemsProvider.items
-              .map(
-                (ShoppingItem shoppingItem) =>
-                    ShoppingItemsViewWidget(shoppingItem),
-              )
-              .toList(),
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 20.0,
+        itemCount: shopItemsProvider.items.length,
+        itemBuilder: (BuildContext ctx, int itemIdx) {
+          return Container(
+            color: Colors.amber[100],
+            child: ShoppingItemsViewWidget(
+              itemIdx + 1,
+              shopItemsProvider.items[itemIdx],
             ),
-          ),
-          ShareComponentWidget(),
-        ],
-        //),
+          );
+        },
       ),
+      // children: <Widget>[
+      //   ...shopItemsProvider.items
+      //       .map(
+      //         (ShoppingItem shoppingItem) => ShoppingItemsViewWidget(
+      //           shoppingItem,
+      //         ),
+      //       )
+      //       .toList(),
+      // const Padding(
+      //   padding: EdgeInsets.only(
+      //     top: 20.0,
+      //   ),
+      // ),
+      // ShareComponentWidget(),
+      //],
+      //),
+      //),
     );
   }
 }
