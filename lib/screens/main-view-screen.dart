@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 import '../constants.dart';
+import '../models_providers/shopping_items_provider.dart';
 
 class MainViewScreen extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final shopItemsProvider = Provider.of<ShoppingItemsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +56,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
           children: [
             ...dummyData
                 .map(
-                  (ShareData data) => Card(
+                  (ShoppingItem data) => Card(
                     child: ListTile(
                       leading: Icon(Icons.arrow_forward),
                       title: Text(
@@ -78,7 +81,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
                 onPressed: () {
                   final RenderBox box = context.findRenderObject();
                   Share.share(
-                    'text',
+                    shopItemsProvider.formattedShareableText,
                     subject: 'text subject',
                     sharePositionOrigin:
                         box.localToGlobal(Offset.zero) & box.size,

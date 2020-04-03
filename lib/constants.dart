@@ -1,36 +1,36 @@
-import 'package:flutter/foundation.dart';
-
-class ShareData {
-  final String name;
-  final String description;
-
-  const ShareData({
-    @required this.name,
-    @required this.description,
-  });
-}
+import './models_providers/shopping_items_provider.dart';
 
 const APP_TITLE_STRING = 'Type and Share App';
 
-const List<ShareData> dummyData = [
-  ShareData(
+const List<ShoppingItem> dummyData = [
+  ShoppingItem(
     name: 'bread',
     description: 'Nanglo bread',
+    quantity: 5.0,
+    unit: 'packet',
   ),
-  ShareData(
+  ShoppingItem(
     name: 'soyabean oil',
     description: 'Swastik brand',
+    quantity: 2.5,
+    unit: 'litre',
   ),
-  ShareData(
+  ShoppingItem(
     name: 'Corn flakes',
     description: 'Kellog\'s brand',
+    quantity: 2.0,
+    unit: 'box',
   ),
-  ShareData(
-    name: 'Dettelo liquied',
+  ShoppingItem(
+    name: 'Dettol liquid',
     description: 'Big bottle',
+    quantity: 3.0,
+    unit: 'bottle',
   ),
-  ShareData(
+  ShoppingItem(
     name: 'Chicken curry masala',
     description: 'Everest brand',
+    quantity: 3.0,
+    unit: 'packet',
   ),
 ];
