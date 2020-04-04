@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
-import '../screens/shopping_item_editor_screen.dart';
-import '../widget/shopping_items_view.dart';
-import '../widget/sharing_component.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
+import '../screens/shopping_item_editor_screen.dart';
+import '../widget/shopping_items_view.dart';
 
 class MainViewScreen extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
   @override
   Widget build(BuildContext context) {
     final navState = Navigator.of(context);
+    final themeData = Theme.of(context);
     final shopItemsProvider = Provider.of<ShoppingItemsProvider>(context);
 
     return Scaffold(
@@ -68,6 +69,18 @@ class _MainViewScreenState extends State<MainViewScreen> {
       //],
       //),
       //),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          final RenderBox box = context.findRenderObject();
+          Share.share(
+            shopItemsProvider.formattedShareableText,
+            subject: SHARED_TEXT_SUBJECT_PREFIX,
+            sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+          );
+        },
+        label: Text('Share this List'),
+        backgroundColor: themeData.accentColor,
+      ),
     );
   }
 }
