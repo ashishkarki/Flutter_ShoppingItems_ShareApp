@@ -61,6 +61,7 @@ class ShoppingItemEditorScreen extends StatelessWidget {
   final _descriptionFocusNode = FocusNode();
   final _quantityFocusNode = FocusNode();
   final _unitFocusNode = FocusNode();
+  ShoppingItem updatedItem = null;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +71,21 @@ class ShoppingItemEditorScreen extends StatelessWidget {
       context,
       listen: false,
     );
+
+    if ((ModalRoute.of(context).settings.arguments as Map) != null &&
+        (ModalRoute.of(context).settings.arguments as Map)['updatedItem'] !=
+            null) {
+      updatedItem =
+          (ModalRoute.of(context).settings.arguments as Map)['updatedItem'];
+      if (updatedItem != null) {
+        _initShoppingItemValues = {
+          'name': updatedItem.name,
+          'description': updatedItem.description,
+          'quantity': updatedItem.quantity,
+          'unit': updatedItem.unit,
+        };
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(

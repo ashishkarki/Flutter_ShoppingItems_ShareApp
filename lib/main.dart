@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           accentColor: Colors.amber,
         ),
-        home: ShoppingListScreen(),
+        home: NameAddressViewScreen(),
         routes: {
           ShoppingListScreen.routeName: (ctx) => ShoppingListScreen(),
           ShoppingItemEditorScreen.routeName: (ctx) =>

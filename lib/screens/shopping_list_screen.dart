@@ -12,6 +12,26 @@ import '../widget/shopping_item.dart';
 class ShoppingListScreen extends StatelessWidget {
   static final routeName = '/shopping-list';
 
+  void _deleteShoppingItem(
+    ShoppingItemsProvider shoppingItemsProvider,
+    ShoppingItem itemToDelete,
+  ) {
+    shoppingItemsProvider.deleteShoppingItem(itemToDelete);
+  }
+
+  void _updateShoppingItem(
+    BuildContext context,
+    ShoppingItemsProvider shoppingItemsProvider,
+    ShoppingItem updatedItem,
+  ) {
+    Navigator.of(context).pushNamed(
+      ShoppingItemEditorScreen.routeName,
+      arguments: {
+        'updatedItem': updatedItem,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final navState = Navigator.of(context);
@@ -41,6 +61,15 @@ class ShoppingListScreen extends StatelessWidget {
             child: ShoppingItemWidget(
               itemIdx + 1,
               shopItemsProvider.items[itemIdx],
+              () => _updateShoppingItem(
+                context,
+                shopItemsProvider,
+                shopItemsProvider.items[itemIdx],
+              ),
+              () => _deleteShoppingItem(
+                shopItemsProvider,
+                shopItemsProvider.items[itemIdx],
+              ),
             ),
           );
         },

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models_providers/shopping_items_provider.dart';
 
 class ShoppingDropdown extends StatefulWidget {
   final List<String> _dropdownItems;
@@ -53,6 +51,5 @@ class _ShoppingDropdownState extends State<ShoppingDropdown> {
         );
       }).toList(),
     );
-    ;
   }
 }

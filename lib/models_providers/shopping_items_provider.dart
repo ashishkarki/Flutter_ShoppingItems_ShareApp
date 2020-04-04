@@ -21,7 +21,7 @@ class ShoppingItem {
 class ShoppingItemsProvider
     with ChangeNotifier
     implements AbstractShoppingOutput {
-  List<ShoppingItem> _items = [...dummyData];
+  List<ShoppingItem> _items = [];
 
   int get _serialNumber {
     // get a brand new serial no. for a new item being added
@@ -58,7 +58,23 @@ class ShoppingItemsProvider
     notifyListeners();
   }
 
-  void updateShoppingItemUnits(int newShoppingItemWithUnitsOnly) {}
+  void deleteShoppingItem(ShoppingItem itemToDelete) {
+    _items.remove(itemToDelete);
+
+    notifyListeners();
+  }
+
+  void updateShoppingItem(ShoppingItem updatedItem) {
+    final idToUpdate = updatedItem.serialNumber;
+    // final indexOfIdToUpdate = _items.indexWhere((shopItem) => shopItem.serialNumber == idToUpdate);
+
+    _items.removeWhere((shopItem) => shopItem.serialNumber == idToUpdate);
+    _items.add(updatedItem);
+
+    sortShoppingItems();
+
+    notifyListeners();
+  }
 
   void sortShoppingItems() {
     _items.sort(
