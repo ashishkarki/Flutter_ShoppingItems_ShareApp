@@ -19,6 +19,7 @@ class AppStateProvider with ChangeNotifier {
 
   set itemViewIndex(int stepBy) {
     _itemViewIndex += stepBy;
+    notifyListeners();
   }
 
   bool get isLoading {
@@ -27,5 +28,6 @@ class AppStateProvider with ChangeNotifier {
 
   set isLoading(bool value) {
     _isLoading = value;
+    notifyListeners();
   }
 }
