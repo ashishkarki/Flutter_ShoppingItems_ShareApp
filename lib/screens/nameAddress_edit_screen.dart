@@ -11,8 +11,6 @@ class NameAddressEditScreen extends StatefulWidget {
 }
 
 class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
-  var _inputDisabled = true;
-
   final _formKey = GlobalKey<FormState>();
 
   FocusNode _currentFocusNode;

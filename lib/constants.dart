@@ -21,6 +21,9 @@ const SHOPPING_ITEM_UNIT_NAMEs = [
   'Other-general Unit'
 ];
 
+const SHARED_PREF_NAME_ADDRESS_STRING = 'userNameAddress';
+const SHARED_PREF_SHOPPING_ITEMS_STRING = 'userShoppingItems';
+
 void showMyAlert(BuildContext context) {
   showDialog(
     context: context,

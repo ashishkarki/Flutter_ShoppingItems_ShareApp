@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
 class ShoppingItemWidget extends StatelessWidget {
   final int itemViewIndex;
   final ShoppingItem _shoppingItem;
+  final Function _updateShoppingItem;
+  final Function _deleteShoppingItem;
 
-  ShoppingItemWidget(this.itemViewIndex, this._shoppingItem);
+  ShoppingItemWidget(
+    this.itemViewIndex,
+    this._shoppingItem,
+    this._updateShoppingItem,
+    this._deleteShoppingItem,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return Card(
       child: ListTile(
+        dense: true,
         leading: Text('$itemViewIndex.'),
         title: Text(
           _shoppingItem.name,
-          style: themeData.textTheme.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         subtitle: Text(
           '${_shoppingItem.description}, Qty: ${_shoppingItem.quantity} ${_shoppingItem.unit}',
@@ -29,8 +36,14 @@ class ShoppingItemWidget extends StatelessWidget {
           width: 100,
           child: Row(
             children: <Widget>[
-              IconButton(icon: Icon(Icons.edit), onPressed: () {}),
-              IconButton(icon: Icon(Icons.delete), onPressed: () {}),
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: _updateShoppingItem,
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: _deleteShoppingItem,
+              ),
             ],
           ),
         ),
