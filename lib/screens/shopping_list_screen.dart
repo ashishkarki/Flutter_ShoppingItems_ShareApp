@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-import 'package:shopping_items_share/widget/shopping_app_drawer.dart';
 
+import '../models_providers/name_address_provider.dart';
+import '../widget/shopping_app_drawer.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 import '../screens/shopping_item_editor_screen.dart';
@@ -16,6 +17,7 @@ class ShoppingListScreen extends StatelessWidget {
     final navState = Navigator.of(context);
     final themeData = Theme.of(context);
     final shopItemsProvider = Provider.of<ShoppingItemsProvider>(context);
+    final nameAddProvider = Provider.of<NameAddressProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +49,7 @@ class ShoppingListScreen extends StatelessWidget {
         onPressed: () {
           final RenderBox box = context.findRenderObject();
           Share.share(
-            shopItemsProvider.formattedShareableText,
+            '${nameAddProvider.formattedShareableText}\n${shopItemsProvider.formattedShareableText}',
             subject: SHARED_TEXT_SUBJECT_PREFIX,
             sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
           );

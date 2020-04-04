@@ -99,7 +99,6 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
   @override
   Widget build(BuildContext context) {
     final _nameAddProvider = Provider.of<NameAddressProvider>(context);
-    final focusScope = FocusScope.of(context);
 
     return Scaffold(
       appBar: AppBar(

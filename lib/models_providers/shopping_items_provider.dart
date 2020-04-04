@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shopping_items_share/abstract/shopping_output.dart';
 import '../constants.dart';
 
 class ShoppingItem {
@@ -17,7 +18,9 @@ class ShoppingItem {
   });
 }
 
-class ShoppingItemsProvider with ChangeNotifier {
+class ShoppingItemsProvider
+    with ChangeNotifier
+    implements AbstractShoppingOutput {
   List<ShoppingItem> _items = [...dummyData];
 
   int get _serialNumber {
@@ -29,6 +32,7 @@ class ShoppingItemsProvider with ChangeNotifier {
     return [..._items];
   }
 
+  @override
   String get formattedShareableText {
     var itemIndex = 0;
     var formatShareText = '';

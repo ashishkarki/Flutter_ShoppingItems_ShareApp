@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import '../abstract/shopping_output.dart';
+
 class NameAddress {
   final String firstName;
   final String middleName;
@@ -37,7 +39,9 @@ class NameAddress {
         );
 }
 
-class NameAddressProvider with ChangeNotifier {
+class NameAddressProvider
+    with ChangeNotifier
+    implements AbstractShoppingOutput {
   static final NameAddress _initValue = NameAddress(
     firstName: '<Your-first-name>',
     lastName: '<Your-last-name>',
@@ -78,5 +82,28 @@ class NameAddressProvider with ChangeNotifier {
     _item = editedNameAddress;
     print('_item after: $item');
     notifyListeners();
+  }
+
+  @override
+  String get formattedShareableText {
+    var formatShareText = '';
+
+// full name
+    formatShareText +=
+        'Full Name: ${_item.firstName} ${_item.middleName} ${_item.lastName}' +
+            '\n';
+    // adddress
+    formatShareText +=
+        'Full Address: ${_item.street} (near/around: ${_item.nearestLandmark}),\n ${_item.city}, ${_item.stateOrProvince}\n';
+
+    // phone
+    formatShareText += 'Contact phone: ${_item.contactPhone1}';
+    if (_item.contactPhone2 != null && _item.contactPhone2.isNotEmpty) {
+      formatShareText += 'Alternate Contact phone: ${_item.contactPhone2}\n';
+    } else {
+      formatShareText += '\n';
+    }
+
+    return formatShareText;
   }
 }
