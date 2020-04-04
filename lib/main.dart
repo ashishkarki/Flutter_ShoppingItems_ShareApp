@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 
 import './models_providers/shopping_items_provider.dart';
 import './models_providers/app_state_provider.dart';
+import './models_providers/name_address_provider.dart';
 
-import './screens/main_view_screen.dart';
+import './screens/nameAddress_view_screen.dart';
+import './screens/shopping_list_screen.dart';
 import 'screens/shopping_item_editor_screen.dart';
 
 void main() => runApp(MyApp());
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: AppStateProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: NameAddressProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'some title',
@@ -27,10 +32,12 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           accentColor: Colors.amber,
         ),
-        home: MainViewScreen(),
+        home: NameAddressViewScreen(),
         routes: {
+          ShoppingListScreen.routeName: (ctx) => ShoppingListScreen(),
           ShoppingItemEditorScreen.routeName: (ctx) =>
               ShoppingItemEditorScreen(),
+          NameAddressViewScreen.routeName: (ctx) => NameAddressViewScreen(),
         },
       ),
     );
