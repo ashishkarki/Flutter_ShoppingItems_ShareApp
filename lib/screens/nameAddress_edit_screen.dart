@@ -85,15 +85,15 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
   @override
   void dispose() {
     super.dispose();
-    _currentFocusNode.dispose();
-    _lastNameFocusNode.dispose();
-    _middleNameFocusNode.dispose();
-    _streetFocusNode.dispose();
-    _cityFocusNode.dispose();
-    _stateFocusNode.dispose();
-    _landmarkFocusNode.dispose();
-    _phone1FocusNode.dispose();
-    _phone2FocusNode.dispose();
+    // _currentFocusNode.dispose();
+    // _lastNameFocusNode.dispose();
+    // _middleNameFocusNode.dispose();
+    // _streetFocusNode.dispose();
+    // _cityFocusNode.dispose();
+    // _stateFocusNode.dispose();
+    // _landmarkFocusNode.dispose();
+    // _phone1FocusNode.dispose();
+    // _phone2FocusNode.dispose();
   }
 
   @override
@@ -156,8 +156,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _middleNameFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_lastNameFocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_lastNameFocusNode),
                   validator: (value) {
                     // optional field so always valid
                     return null;
@@ -185,8 +184,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _lastNameFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_streetFocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_streetFocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a last name';
@@ -216,8 +214,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _streetFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_cityFocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_cityFocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a street name or n/a if not available';
@@ -247,8 +244,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _cityFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_stateFocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_stateFocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a City name';
@@ -278,8 +274,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _stateFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_landmarkFocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_landmarkFocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a State or province name';
@@ -292,7 +287,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                       middleName: _editedNameAddress.middleName,
                       lastName: _editedNameAddress.lastName,
                       street: _editedNameAddress.street,
-                      city: _editedNameAddress.contactPhone2,
+                      city: _editedNameAddress.city,
                       stateOrProvince: value,
                       nearestLandmark: _editedNameAddress.nearestLandmark,
                       contactPhone1: _editedNameAddress.contactPhone1,
@@ -309,8 +304,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _landmarkFocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_phone1FocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_phone1FocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a landmark name';
@@ -323,7 +317,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                       middleName: _editedNameAddress.middleName,
                       lastName: _editedNameAddress.lastName,
                       street: _editedNameAddress.street,
-                      city: _editedNameAddress.contactPhone2,
+                      city: _editedNameAddress.city,
                       stateOrProvince: _editedNameAddress.stateOrProvince,
                       nearestLandmark: value,
                       contactPhone1: _editedNameAddress.contactPhone1,
@@ -340,8 +334,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   focusNode: _phone1FocusNode,
-                  onFieldSubmitted: (_) =>
-                      focusScope.requestFocus(_phone2FocusNode),
+                  onFieldSubmitted: (_) => _changeFocus(_phone2FocusNode),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter a phone number';
@@ -354,7 +347,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                       middleName: _editedNameAddress.middleName,
                       lastName: _editedNameAddress.lastName,
                       street: _editedNameAddress.street,
-                      city: _editedNameAddress.contactPhone2,
+                      city: _editedNameAddress.city,
                       stateOrProvince: _editedNameAddress.stateOrProvince,
                       nearestLandmark: _editedNameAddress.nearestLandmark,
                       contactPhone1: value,
@@ -380,7 +373,7 @@ class _NameAddressEditScreenState extends State<NameAddressEditScreen> {
                       middleName: _editedNameAddress.middleName,
                       lastName: _editedNameAddress.lastName,
                       street: _editedNameAddress.street,
-                      city: _editedNameAddress.contactPhone2,
+                      city: _editedNameAddress.city,
                       stateOrProvince: _editedNameAddress.stateOrProvince,
                       nearestLandmark: _editedNameAddress.nearestLandmark,
                       contactPhone1: _editedNameAddress.contactPhone1,
