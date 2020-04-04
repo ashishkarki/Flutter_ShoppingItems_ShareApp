@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../models_providers/app_state_provider.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
-class ShoppingItemsViewWidget extends StatelessWidget {
+class ShoppingItemWidget extends StatelessWidget {
   final int itemViewIndex;
   final ShoppingItem _shoppingItem;
 
-  ShoppingItemsViewWidget(this.itemViewIndex, this._shoppingItem);
+  ShoppingItemWidget(this.itemViewIndex, this._shoppingItem);
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +25,15 @@ class ShoppingItemsViewWidget extends StatelessWidget {
           softWrap: true,
           overflow: TextOverflow.clip,
         ),
-        trailing: Icon(Icons.delete),
-        onTap: () => showMyAlert(context),
+        trailing: Container(
+          width: 100,
+          child: Row(
+            children: <Widget>[
+              IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              IconButton(icon: Icon(Icons.delete), onPressed: () {}),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -7,7 +7,7 @@ import '../widget/shopping_app_drawer.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 import '../screens/shopping_item_editor_screen.dart';
-import '../widget/shopping_items_view.dart';
+import '../widget/shopping_item.dart';
 
 class ShoppingListScreen extends StatelessWidget {
   static final routeName = '/shopping-list';
@@ -38,7 +38,7 @@ class ShoppingListScreen extends StatelessWidget {
         itemBuilder: (BuildContext ctx, int itemIdx) {
           return Container(
             color: Colors.amber[100],
-            child: ShoppingItemsViewWidget(
+            child: ShoppingItemWidget(
               itemIdx + 1,
               shopItemsProvider.items[itemIdx],
             ),
@@ -54,9 +54,10 @@ class ShoppingListScreen extends StatelessWidget {
             sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
           );
         },
-        label: Text('Share this List'),
+        label: Text('Share List'),
         backgroundColor: themeData.accentColor,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       drawer: ShoppingAppDrawer(),
     );
   }
