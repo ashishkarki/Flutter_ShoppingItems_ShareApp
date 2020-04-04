@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:shopping_items_share/widget/shopping_app_drawer.dart';
 
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
@@ -22,13 +23,13 @@ class _MainViewScreenState extends State<MainViewScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 6,
-        leading: GestureDetector(
-          child: IconButton(
-            icon: Icon(Icons.mail),
-            tooltip: "Click to add/update your address",
-            onPressed: () => showMyAlert(context),
-          ),
-        ),
+        // leading: GestureDetector(
+        //   child: IconButton(
+        //     icon: Icon(Icons.mail),
+        //     tooltip: "Click to add/update your address",
+        //     onPressed: () => showMyAlert(context),
+        //   ),
+        // ),
         title: Text(APP_TITLE_STRING),
         actions: <Widget>[
           IconButton(
@@ -81,6 +82,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
         label: Text('Share this List'),
         backgroundColor: themeData.accentColor,
       ),
+      drawer: ShoppingAppDrawer(),
     );
   }
 }
