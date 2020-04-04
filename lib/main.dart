@@ -5,6 +5,7 @@ import './models_providers/shopping_items_provider.dart';
 import './models_providers/app_state_provider.dart';
 import './models_providers/name_address_provider.dart';
 
+import './screens/nameAddress_edit_screen.dart';
 import './screens/nameAddress_view_screen.dart';
 import './screens/shopping_list_screen.dart';
 import 'screens/shopping_item_editor_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           ShoppingItemEditorScreen.routeName: (ctx) =>
               ShoppingItemEditorScreen(),
           NameAddressViewScreen.routeName: (ctx) => NameAddressViewScreen(),
+          NameAddressEditScreen.routeName: (ctx) => NameAddressEditScreen(),
         },
       ),
     );

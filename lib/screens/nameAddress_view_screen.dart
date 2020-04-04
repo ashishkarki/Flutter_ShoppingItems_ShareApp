@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_items_share/screens/nameAddress_edit_screen.dart';
 import 'package:shopping_items_share/widget/shopping_app_drawer.dart';
 
 import '../models_providers/name_address_provider.dart';
@@ -9,10 +10,10 @@ class NameAddressViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final NameAddressProvider nameAddProvider =
         Provider.of<NameAddressProvider>(context);
     final NameAddress nameAddressItem = nameAddProvider.item;
+    final navState = Navigator.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +26,9 @@ class NameAddressViewScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit_location),
-            onPressed: null,
+            onPressed: () {
+              navState.pushNamed(NameAddressEditScreen.routeName);
+            },
           ),
         ],
       ),
@@ -71,35 +74,35 @@ class NameAddressViewScreen extends StatelessWidget {
               title: Text(
                 nameAddressItem.city,
               ),
-              subtitle: Text('City: '),
+              subtitle: Text('City'),
               dense: true,
             ),
             ListTile(
               title: Text(
                 nameAddressItem.stateOrProvince,
               ),
-              subtitle: Text('Street/Province Name: '),
+              subtitle: Text('Street/Province Name'),
               dense: true,
             ),
             ListTile(
               title: Text(
                 nameAddressItem.nearestLandmark,
               ),
-              subtitle: Text('Nearest Landmark: '),
+              subtitle: Text('Nearest Landmark'),
               dense: true,
             ),
             ListTile(
               title: Text(
                 nameAddressItem.contactPhone1,
               ),
-              subtitle: Text('Contact 1: '),
+              subtitle: Text('Contact 1'),
               dense: true,
             ),
             ListTile(
               title: Text(
                 nameAddressItem.contactPhone2,
               ),
-              subtitle: Text('Contact 2(if available): '),
+              subtitle: Text('Contact 2(if available)'),
               dense: true,
             ),
           ],

@@ -40,15 +40,28 @@ class NameAddress {
 class NameAddressProvider with ChangeNotifier {
   static final NameAddress _initValue = NameAddress(
     firstName: '<Your-first-name>',
-    lastName: '',
-    middleName: 'singh',
-    street: 'hallu ballu road of jhandu city',
-    city: '',
-    stateOrProvince: '',
-    nearestLandmark: 'Regenty-Saty Paisa Kamau School',
-    contactPhone1: '9841297859',
-    contactPhone2: '',
+    lastName: '<Your-last-name>',
+    middleName: '<Your-middle-name>',
+    street: '<Your-street-road-name>',
+    city: '<Your-city-name>',
+    stateOrProvince: '<Your-state-province-name-number>',
+    nearestLandmark: '<Name-of-a-landmark-near-you>',
+    contactPhone1: '<your-10-digit-string-phone>',
+    contactPhone2: '<your-10-digit-string-phone>',
+    // firstName: '',
+    // middleName: '',
+    // lastName: '',
+    // street: '',
+    // city: '',
+    // stateOrProvince: '',
+    // nearestLandmark: '',
+    // contactPhone1: '',
+    // contactPhone2: '',
   );
+
+  NameAddress get initNameAddValue {
+    return NameAddress.clone(_initValue);
+  }
 
   NameAddress _item = _initValue;
 
@@ -58,5 +71,12 @@ class NameAddressProvider with ChangeNotifier {
 
   set item(NameAddress newNameAdd) {
     _item = newNameAdd;
+    notifyListeners();
+  }
+
+  void addNewNameAddress(NameAddress editedNameAddress) {
+    _item = editedNameAddress;
+    print('_item after: $item');
+    notifyListeners();
   }
 }
