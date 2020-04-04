@@ -58,7 +58,9 @@ class ShoppingItemsProvider with ChangeNotifier {
 
   void sortShoppingItems() {
     _items.sort(
-      (item1, item2) => item1.name.compareTo(item2.name),
+      (item1, item2) => item1.name.compareTo(
+        item2.name,
+      ),
     );
   }
 }
