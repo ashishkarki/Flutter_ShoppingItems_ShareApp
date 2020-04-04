@@ -3,8 +3,23 @@ import 'package:flutter/material.dart';
 import './models_providers/shopping_items_provider.dart';
 
 const APP_TITLE_STRING = 'Type and Share App';
+
 const SHARED_TEXT_SUBJECT_PREFIX =
     'Please deliver following items: (created using Ashish Karki\'s App)';
+
+const SHOPPING_ITEM_UNIT_NAMEs = [
+  'Kilogram',
+  'Grams',
+  'Litre',
+  'Millilitre',
+  'Packet',
+  'Bag',
+  'Box',
+  'Can',
+  'Bottle',
+  'Piece',
+  'Other-general Unit'
+];
 
 void showMyAlert(BuildContext context) {
   showDialog(
@@ -22,7 +37,7 @@ void showMyAlert(BuildContext context) {
   );
 }
 
-const List<ShoppingItem> dummyData = [
+final List<ShoppingItem> dummyData = [
   ShoppingItem(
     serialNumber: 1,
     name: 'bread',

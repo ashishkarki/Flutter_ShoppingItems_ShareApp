@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/shopping_item_editor_screen.dart';
-import '../widget/shoppingItems_view.dart';
-import '../widget/share-feature.dart';
+import '../widget/shopping_items_view.dart';
+import '../widget/sharing_component.dart';
 import '../constants.dart';
 import '../models_providers/shopping_items_provider.dart';
 
@@ -15,7 +16,7 @@ class _MainViewScreenState extends State<MainViewScreen> {
   @override
   Widget build(BuildContext context) {
     final navState = Navigator.of(context);
-    final shoppingItemList = dummyData;
+    final shopItemsProvider = Provider.of<ShoppingItemsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,21 +38,36 @@ class _MainViewScreenState extends State<MainViewScreen> {
           ),
         ],
       ),
-      body: ListView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(15.0),
-        children: <Widget>[
-          ...shoppingItemList
-              .map((ShoppingItem shopItem) => ShoppingItemsViewWidget(shopItem))
-              .toList(),
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 20.0,
+        itemCount: shopItemsProvider.items.length,
+        itemBuilder: (BuildContext ctx, int itemIdx) {
+          return Container(
+            color: Colors.amber[100],
+            child: ShoppingItemsViewWidget(
+              itemIdx + 1,
+              shopItemsProvider.items[itemIdx],
             ),
-          ),
-          ShareFeatureWidget(),
-        ],
-        //),
+          );
+        },
       ),
+      // children: <Widget>[
+      //   ...shopItemsProvider.items
+      //       .map(
+      //         (ShoppingItem shoppingItem) => ShoppingItemsViewWidget(
+      //           shoppingItem,
+      //         ),
+      //       )
+      //       .toList(),
+      // const Padding(
+      //   padding: EdgeInsets.only(
+      //     top: 20.0,
+      //   ),
+      // ),
+      // ShareComponentWidget(),
+      //],
+      //),
+      //),
     );
   }
 }
