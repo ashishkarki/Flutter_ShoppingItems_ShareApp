@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,6 +13,7 @@ class AuthProvider with ChangeNotifier {
   String _token;
   DateTime _expiryDatetime;
   String _userId;
+  Timer _authTimer;
 
   bool get isAuthenticated {
     return token != null;
@@ -75,6 +77,9 @@ class AuthProvider with ChangeNotifier {
         ),
       );
 
+      _setupAutoLogout();
+      notifyListeners();
+
       final sharedPref = await SharedPreferences.getInstance();
       final userAuthData = jsonEncode({
         'token': _token,
@@ -85,5 +90,50 @@ class AuthProvider with ChangeNotifier {
     } catch (exception) {
       throw exception;
     }
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    if (!sharedPrefs.containsKey(SHARED_PREF_USER_AUTH_STRING)) {
+      return false; // automatically wrapped in future coz of async
+    }
+
+    final savedUserAuth =
+        jsonDecode(sharedPrefs.get(SHARED_PREF_USER_AUTH_STRING))
+            as Map<String, Object>;
+    final expiryDtFromFirebase =
+        DateTime.parse(savedUserAuth['expiryDatetime']);
+
+    if (expiryDtFromFirebase.isBefore(DateTime.now())) {
+      // token has expired
+      return false;
+    }
+
+    notifyListeners();
+    _setupAutoLogout();
+
+    return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _expiryDatetime = null;
+    _userId = null;
+
+    notifyListeners();
+
+    final sharedPrefs = await SharedPreferences.getInstance();
+    //sharedPrefs.remove('userData'); // clears on userData
+    sharedPrefs.clear(); // clears all-all app data
+  }
+
+  void _setupAutoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+
+    final timeToExpiryInSecs =
+        _expiryDatetime.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExpiryInSecs), logout);
   }
 }

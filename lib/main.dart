@@ -44,6 +44,14 @@ class MyApp extends StatelessWidget {
           home: authProvider.isAuthenticated
               ? NameAddressViewScreen()
               : AuthScreen(),
+          // FutureBuilder(
+          //     builder: (ctx, authResultSnapshot) =>
+          //         authResultSnapshot.connectionState ==
+          //                 ConnectionState.waiting
+          //             ? Center()
+          //             : AuthScreen(),
+          //     future: authProvider.tryAutoLogin(),
+          //   ),
           routes: {
             ShoppingListScreen.routeName: (ctx) => ShoppingListScreen(),
             ShoppingItemEditorScreen.routeName: (ctx) =>
