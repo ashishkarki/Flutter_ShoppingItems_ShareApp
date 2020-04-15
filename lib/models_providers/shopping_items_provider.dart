@@ -44,7 +44,7 @@ class ShoppingItemsProvider
         (String shopItemString) {
           final decodedShopItemStr =
               jsonDecode(shopItemString) as Map<String, Object>;
-          print('decodedShopItemStr: $decodedShopItemStr');
+          //print('decodedShopItemStr: $decodedShopItemStr');
           _items.add(
             ShoppingItem(
               serialNumber: decodedShopItemStr['serialNumber'],

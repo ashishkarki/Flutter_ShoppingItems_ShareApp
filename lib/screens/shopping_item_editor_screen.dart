@@ -57,11 +57,13 @@ class _ShoppingItemEditorScreenState extends State<ShoppingItemEditorScreen> {
     });
 
     try {
-      shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem).then((_) {
-        setState(() {
-          appStateProvider.isLoading = false;
-        });
-      });
+      shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem).then(
+        (_) {
+          setState(() {
+            appStateProvider.isLoading = false;
+          });
+        },
+      );
     } catch (exception) {
       print(exception);
       setState(() {
