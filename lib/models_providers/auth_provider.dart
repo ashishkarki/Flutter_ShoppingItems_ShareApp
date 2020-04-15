@@ -6,14 +6,15 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants.dart';
+
 class AuthProvider with ChangeNotifier {
   String _token;
   DateTime _expiryDatetime;
   String _userId;
 
   bool get isAuthenticated {
-    return false; // TODO
-    // return token != null;
+    return token != null;
   }
 
   String get token {
@@ -30,8 +31,14 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
+  Future<void> signup(String inputEmail, String inputPw) {
+    const signupPostUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+    return _authenticate(inputEmail, inputPw, signupPostUrl);
+  }
+
   Future<void> login(String inputEmail, String inputPw) {
-    const loginPostUrl = 'https://jsonplaceholder.typicode.com/posts';
+    const loginPostUrl = FIREBASE_EMAIL_PW_LOGIN_URL + FIREBASE_WEB_API_KEY;
 
     return _authenticate(inputEmail, inputPw, loginPostUrl);
   }
@@ -45,7 +52,11 @@ class AuthProvider with ChangeNotifier {
       final response = await http.post(
         authUrl,
         body: jsonEncode(
-          {'title': 'foo', 'body': 'bar', 'userId': 1},
+          {
+            'email': inputEmail,
+            'password': inputPw,
+            'returnSecureToken': true,
+          },
         ),
       );
 
@@ -56,14 +67,13 @@ class AuthProvider with ChangeNotifier {
       }
 
       // else set all values here
-      // TODO uncomment below
-      // _token = responseMap['idToken'];
-      // _userId = responseMap['localId'];
-      // _expiryDatetime = DateTime.now().add(
-      //   Duration(
-      //     seconds: int.parse(responseMap['expiresIn']),
-      //   ),
-      // );
+      _token = responseMap['idToken'];
+      _userId = responseMap['localId'];
+      _expiryDatetime = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseMap['expiresIn']),
+        ),
+      );
 
       final sharedPref = await SharedPreferences.getInstance();
       final userAuthData = jsonEncode({
@@ -71,7 +81,7 @@ class AuthProvider with ChangeNotifier {
         'userId': _userId,
         'expiryDatetime': _expiryDatetime.toIso8601String(),
       });
-      sharedPref.setString('userAuthData', userAuthData);
+      sharedPref.setString(SHARED_PREF_USER_AUTH_STRING, userAuthData);
     } catch (exception) {
       throw exception;
     }
