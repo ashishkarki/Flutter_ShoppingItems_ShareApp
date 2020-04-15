@@ -1,5 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../constants.dart';
 import '../abstract/shopping_output.dart';
 
 class NameAddress {
@@ -42,7 +46,7 @@ class NameAddress {
 class NameAddressProvider
     with ChangeNotifier
     implements AbstractShoppingOutput {
-  static final NameAddress _initValue = NameAddress(
+  static final NameAddress initValue = NameAddress(
     firstName: '<Your-first-name>',
     lastName: '<Your-last-name>',
     middleName: '<Your-middle-name>',
@@ -64,24 +68,77 @@ class NameAddressProvider
   );
 
   NameAddress get initNameAddValue {
-    return NameAddress.clone(_initValue);
+    return NameAddress.clone(initValue);
   }
 
-  NameAddress _item = _initValue;
+  NameAddress _item = initValue;
 
-  NameAddress get item {
+  Future<NameAddress> get item async {
+    final sharedPref = await SharedPreferences.getInstance();
+
+    if (sharedPref.containsKey(SHARED_PREF_NAME_ADDRESS_STRING) &&
+        sharedPref.getString(SHARED_PREF_NAME_ADDRESS_STRING) != null) {
+      final savedUserNameAddress =
+          jsonDecode(sharedPref.getString(SHARED_PREF_NAME_ADDRESS_STRING))
+              as Map<String, Object>;
+      print('savedUserNameAddress: $savedUserNameAddress');
+      _item = NameAddress(
+        firstName: savedUserNameAddress['firstName'],
+        lastName: savedUserNameAddress['lastName'],
+        street: savedUserNameAddress['street'],
+        city: savedUserNameAddress['city'],
+        stateOrProvince: savedUserNameAddress['stateOrProvince'],
+        nearestLandmark: savedUserNameAddress['nearestLandmark'],
+        contactPhone1: savedUserNameAddress['contactPhone1'],
+        middleName: savedUserNameAddress['middleName'] == null
+            ? ''
+            : savedUserNameAddress['middleName'],
+        contactPhone2: savedUserNameAddress['contactPhone2'] == null
+            ? ''
+            : savedUserNameAddress['contactPhone2'],
+      );
+    }
+
     return NameAddress.clone(_item);
   }
 
-  set item(NameAddress newNameAdd) {
-    _item = newNameAdd;
-    notifyListeners();
+  set item(Future<NameAddress> newNameAdd) {
+    newNameAdd.then(
+      (value) {
+        _item = value;
+        notifyListeners();
+      },
+    );
   }
 
-  void addNewNameAddress(NameAddress editedNameAddress) {
-    _item = editedNameAddress;
-    print('_item after: $item');
-    notifyListeners();
+  Future<void> addNewNameAddress(NameAddress editedNameAddress) async {
+    try {
+      _item = editedNameAddress;
+
+      notifyListeners();
+
+      final sharedPref = await SharedPreferences.getInstance();
+      final userNameAddress = jsonEncode(
+        {
+          'firstName': editedNameAddress.firstName,
+          'middleName': editedNameAddress.middleName,
+          'lastName': editedNameAddress.lastName,
+          'street': editedNameAddress.street,
+          'city': editedNameAddress.city,
+          'stateOrProvince': editedNameAddress.stateOrProvince,
+          'nearestLandmark': editedNameAddress.nearestLandmark,
+          'contactPhone1': editedNameAddress.contactPhone1,
+          'contactPhone2': editedNameAddress.contactPhone2,
+        },
+      );
+      sharedPref.setString(
+        SHARED_PREF_NAME_ADDRESS_STRING,
+        userNameAddress,
+      );
+    } catch (exception) {
+      print('some errror during addNewNameAddress: $exception');
+      throw exception;
+    }
   }
 
   @override

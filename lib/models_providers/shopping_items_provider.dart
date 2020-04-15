@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_items_share/abstract/shopping_output.dart';
+
 import '../constants.dart';
 
 class ShoppingItem {
@@ -28,7 +32,32 @@ class ShoppingItemsProvider
     return _items.length + 1;
   }
 
-  List<ShoppingItem> get items {
+  Future<List<ShoppingItem>> get items async {
+    final sharedPref = await SharedPreferences.getInstance();
+    if (sharedPref.containsKey(SHARED_PREF_SHOPPING_ITEMS_STRING) &&
+        sharedPref.getStringList(SHARED_PREF_SHOPPING_ITEMS_STRING) != null) {
+      // clear _items
+      _items = [];
+      final List<String> savedShoppingItems =
+          sharedPref.getStringList(SHARED_PREF_SHOPPING_ITEMS_STRING);
+      savedShoppingItems.forEach(
+        (String shopItemString) {
+          final decodedShopItemStr =
+              jsonDecode(shopItemString) as Map<String, Object>;
+          //print('decodedShopItemStr: $decodedShopItemStr');
+          _items.add(
+            ShoppingItem(
+              serialNumber: decodedShopItemStr['serialNumber'],
+              name: decodedShopItemStr['name'],
+              description: decodedShopItemStr['description'],
+              unit: decodedShopItemStr['unit'],
+              quantity: decodedShopItemStr['quantity'],
+            ),
+          );
+        },
+      );
+    }
+
     return [..._items];
   }
 
@@ -47,15 +76,41 @@ class ShoppingItemsProvider
     return formatShareText;
   }
 
-  void addNewShoppingItem(ShoppingItem newShoppingItem) {
-    // generate new serialnumber before adding the new item
-    newShoppingItem.serialNumber = _serialNumber;
+  Future<void> addNewShoppingItem(ShoppingItem newShoppingItem) async {
+    try {
+      // generate new serialnumber before adding the new item
+      newShoppingItem.serialNumber = _serialNumber;
 
-    _items.add(newShoppingItem);
-    // also, sort items according to the name
-    sortShoppingItems();
+      _items.add(newShoppingItem);
+      // also, sort items according to the name
+      sortShoppingItems();
 
-    notifyListeners();
+      notifyListeners();
+
+      final sharedPref = await SharedPreferences.getInstance();
+      List<String> userShoppingItems = [];
+      _items.forEach((ShoppingItem shopItem) {
+        userShoppingItems.add(
+          jsonEncode(
+            {
+              'serialNumber': shopItem.serialNumber,
+              'name': shopItem.name,
+              'description': shopItem.description,
+              'quantity': shopItem.quantity,
+              'unit': shopItem.unit,
+            },
+          ),
+        );
+      });
+
+      sharedPref.setStringList(
+        SHARED_PREF_SHOPPING_ITEMS_STRING,
+        userShoppingItems,
+      );
+    } on Exception catch (exception) {
+      print('some errror during addNewShoppingItem: $exception');
+      throw exception;
+    }
   }
 
   void deleteShoppingItem(ShoppingItem itemToDelete) {

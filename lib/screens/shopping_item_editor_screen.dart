@@ -6,16 +6,24 @@ import '../widget/shopping_dropdown.dart';
 import '../models_providers/app_state_provider.dart';
 import '../constants.dart';
 
-class ShoppingItemEditorScreen extends StatelessWidget {
+class ShoppingItemEditorScreen extends StatefulWidget {
   static final routeName = '/shopping-item-editor';
 
+  @override
+  _ShoppingItemEditorScreenState createState() =>
+      _ShoppingItemEditorScreenState();
+}
+
+class _ShoppingItemEditorScreenState extends State<ShoppingItemEditorScreen> {
   final _formKey = GlobalKey<FormState>();
+
   var _editedShoppingItem = ShoppingItem(
     name: '',
     description: '',
     quantity: 0.0,
     unit: '',
   );
+
   var _initShoppingItemValues = {
     'name': '',
     'description': '',
@@ -44,13 +52,23 @@ class ShoppingItemEditorScreen extends StatelessWidget {
 
     _formKey.currentState.save();
 
-    appStateProvider.isLoading = true;
+    setState(() {
+      appStateProvider.isLoading = true;
+    });
 
     try {
-      print('after onsave: ${_editedShoppingItem.unit}');
-      shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem);
+      shoppingItemsProvider.addNewShoppingItem(_editedShoppingItem).then(
+        (_) {
+          setState(() {
+            appStateProvider.isLoading = false;
+          });
+        },
+      );
     } catch (exception) {
       print(exception);
+      setState(() {
+        appStateProvider.isLoading = false;
+      });
     } finally {
       appStateProvider.isLoading = false;
     }
@@ -59,7 +77,9 @@ class ShoppingItemEditorScreen extends StatelessWidget {
   }
 
   final _descriptionFocusNode = FocusNode();
+
   final _quantityFocusNode = FocusNode();
+
   final _unitFocusNode = FocusNode();
   ShoppingItem updatedItem = null;
 

@@ -52,25 +52,40 @@ class ShoppingListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(15.0),
-        itemCount: shopItemsProvider.items.length,
-        itemBuilder: (BuildContext ctx, int itemIdx) {
-          return Container(
-            color: Colors.amber[100],
-            child: ShoppingItemWidget(
-              itemIdx + 1,
-              shopItemsProvider.items[itemIdx],
-              () => _updateShoppingItem(
-                context,
-                shopItemsProvider,
-                shopItemsProvider.items[itemIdx],
-              ),
-              () => _deleteShoppingItem(
-                shopItemsProvider,
-                shopItemsProvider.items[itemIdx],
-              ),
-            ),
+      body: FutureBuilder(
+        future: shopItemsProvider.items,
+        builder: (
+          BuildContext ctx,
+          AsyncSnapshot<List<ShoppingItem>> snapshot,
+        ) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(15.0),
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext ctx, int itemIdx) {
+              final currentShopItem = snapshot.data[itemIdx];
+              return Container(
+                color: Colors.amber[100],
+                child: ShoppingItemWidget(
+                  itemIdx + 1,
+                  currentShopItem,
+                  () => _updateShoppingItem(
+                    context,
+                    shopItemsProvider,
+                    currentShopItem,
+                  ),
+                  () => _deleteShoppingItem(
+                    shopItemsProvider,
+                    currentShopItem,
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
