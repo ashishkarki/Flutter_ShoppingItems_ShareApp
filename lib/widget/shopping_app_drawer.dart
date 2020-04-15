@@ -29,8 +29,9 @@ class ShoppingAppDrawer extends StatelessWidget {
             leading: Icon(Icons.list),
             title: Text('Shopping-List'),
             subtitle: Text('View/Update List'),
-            onTap: () =>
-                navState.pushReplacementNamed(ShoppingListScreen.routeName),
+            onTap: () => navState.pushReplacementNamed(
+              ShoppingListScreen.routeName,
+            ),
           ),
         ],
       ),
